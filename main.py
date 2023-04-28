@@ -116,6 +116,18 @@ def get_ciba():
     note_en = r.json()["content"]
     note_ch = r.json()["note"]
     return note_ch, note_en
+   
+def rainbow():
+    conn = http.client.HTTPSConnection('apis.tianapi.com')  #接口域名
+    params = urllib.parse.urlencode({'key':'b81def0a28e2f289b7037ffcb9186b64'})
+    headers = {'Content-type':'application/x-www-form-urlencoded'}
+    conn.request('POST','/caihongpi/index',params,headers)
+    tianapi = conn.getresponse()
+    result = tianapi.read()
+    data = result.decode('utf-8')
+    dict_data = json.loads(data)
+    rainbow = dict_data['result']['content']
+    return rainbow
  
  
 def send_message(to_user, access_token, region_name, weather, temp, wind_dir, note_ch, note_en, rainbow):
@@ -207,17 +219,7 @@ def send_message(to_user, access_token, region_name, weather, temp, wind_dir, no
         print("推送消息成功")
     else:
         print(response)
-
-def rainbow():
-    conn = http.client.HTTPSConnection('apis.tianapi.com')  #接口域名
-    params = urllib.parse.urlencode({'key':'b81def0a28e2f289b7037ffcb9186b64'})
-    headers = {'Content-type':'application/x-www-form-urlencoded'}
-    conn.request('POST','/caihongpi/index',params,headers)
-    tianapi = conn.getresponse()
-    result = tianapi.read()
-    data = result.decode('utf-8')
-    dict_data = json.loads(data)
-    print(dict_data['result']['content'])
+      
  
 if __name__ == "__main__":
     try:
