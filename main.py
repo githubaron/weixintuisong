@@ -5,6 +5,8 @@ from datetime import datetime, date
 from zhdate import ZhDate
 import sys
 import os
+import http.client, urllib, json
+ 
  
  
 def get_color():
@@ -201,6 +203,17 @@ def send_message(to_user, access_token, region_name, weather, temp, wind_dir, no
     else:
         print(response)
  
+ def get_tw(): 
+    conn = http.client.HTTPSConnection('apis.tianapi.com')  #接口域名
+    params = urllib.parse.urlencode({'key':'b81def0a28e2f289b7037ffcb9186b64'})
+    headers = {'Content-type':'application/x-www-form-urlencoded'}
+    conn.request('POST','/caihongpi/index',params,headers)
+    tianapi = conn.getresponse()
+    result = tianapi.read()
+    data = result.decode('utf-8')
+    dict_data = json.loads(data)
+    print(dict_data)
+ 
  
 if __name__ == "__main__":
     try:
@@ -214,6 +227,7 @@ if __name__ == "__main__":
         print("推送消息失败，请检查配置文件格式是否正确")
         os.system("pause")
         sys.exit(1)
+
  
     # 获取accessToken
     accessToken = get_access_token()
@@ -224,6 +238,7 @@ if __name__ == "__main__":
     weather, temp, wind_dir = get_weather(region)
     note_ch = config["note_ch"]
     note_en = config["note_en"]
+    test = get_tw()
     if note_ch == "" and note_en == "":
         # 获取词霸每日金句
         note_ch, note_en = get_ciba()
